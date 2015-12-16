@@ -17,10 +17,33 @@ import re
 def check(api):
   print "check config hdfs for FloodVolume"
   cm = ClouderaManager(api)
-  cluster = cluster = api.get_cluster("HDDTest")
+  cluster = api.get_cluster("HDDTest")
   hdfs_service = cluster.get_service("HDFS")
   hdfs_config = hdfs_service.get_config(view="Full")
-  print hdfs_config
+  return hdfs_service
+  
+
+def config(hdfs_service):
+  hdfs_config= {
+        "com_dssd_hadoop_floodds_usablecapacity": 100000000000000,
+        "com_dssd_hadoop_floodds_volume": "twu_vol" 
+  }   
+  hdfs_service.update_config(hdfs_config)
+  //dig into roles to find DN and NN configs
+  // SCR in datanode config
+
+  //dig into hbase/impala configs
+
+
+def installHBase():
+  """
+  """
+
+
+def installImpala():
+  """
+  """
+  
 
 
 def cm_args_parser():
@@ -37,8 +60,8 @@ def main():
   print "connecting to host:" + args.cm_host + "..."
   api = ApiResource(args.cm_host, username=args.cm_user, password=args.cm_password)
   print "done..."
-  check(api)
-
+  hdfs_service = check(api)
+  config(hdfs_service)
 
 
 if __name__ == '__main__':
