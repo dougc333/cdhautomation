@@ -29,10 +29,19 @@ def config(hdfs_service):
         "com_dssd_hadoop_floodds_volume": "twu_vol" 
   }   
   hdfs_service.update_config(hdfs_config)
-  //dig into roles to find DN and NN configs
-  // SCR in datanode config
+  #dig into roles to find DN and NN configs
+  # SCR in datanode config
+  hdfs_role_config_groups = hdfs_service.get_all_role_config_groups()
+  print "hdfs_role_config_groups:",hdfs_role_config_groups
+  hdfs_role_types = hdfs_service.get_role_types()
+  print "hdfs_role_types:"
+  print hdfs_role_types
+  print "hdfs_roles:"
+  hdfs_roles = hdfs_service.get_all_roles(view="Full")
+  print hdfs_roles
 
-  //dig into hbase/impala configs
+
+ 
 
 
 def installHBase():
