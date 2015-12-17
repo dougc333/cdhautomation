@@ -187,11 +187,17 @@ def add_parcels(api):
  
       
 
-def install_hdd_hdfs():
+def install_hdd_hdfs(api):
   """
   """
+  print "cleaning hdfs directories for format"
+  subprocess.call("cleandatanode.sh")
+  print "finished cleaning directories"
   
 
+def install_hdd_impala(api):
+  """
+  """
 
 
 def config_swap_and_thp():
