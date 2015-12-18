@@ -1,3 +1,6 @@
-testdssdscr.py : switch between clusters, dssd and non dssd mode; 
-config.py; installs/configures/starts dssd datanode
-metrics.py: runs benchmarks
+
+
+1) start w/empty cloudera manager ./addSM.py to install cloudera management service
+2) initservices.py (distributes, activates parcels)
+3) installservices.py (installs hdfs)
+
