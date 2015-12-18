@@ -6,7 +6,6 @@
 
 
 
-
 import sys
 import argparse
 import subprocess
@@ -32,8 +31,10 @@ from cm_api.endpoints.parcels import get_parcel
 from time import sleep
 import re
 
-FIREHOSE_DATABASE_PASSWORD="Uq0Wz7kksX"
-HEADLAMP_DATABASE_PASSWORD="vSVFkQwRRp"
+#these constants are in /etc/cloudera-scm-server/db.mgmt.properties
+#parse once we have working code
+AMON_PASSWORD="ApwcwtKYZA"
+RMAN_PASSWORD="WOpCAH8w0M"
 CM_HOST='r2341-d5-us01.dssd.com'
 
 # without the roles we end up with MGMT which cant start
@@ -41,10 +42,10 @@ AMON_ROLENAME="ACTIVITYMONITOR"
 AMON_ROLE_CONFIG = {
    'firehose_database_host': "r2341-d5-us01.dssd.com:7432",
    'firehose_database_user': 'amon',
-   'firehose_database_password': FIREHOSE_DATABASE_PASSWORD,
+   'firehose_database_password': AMON_PASSWORD,
    'firehose_database_type': 'postgresql',
    'firehose_database_name': 'amon',
-   'firehose_heapsize': '215964392',
+   'firehose_heapsize': '268435456',
 }
 APUB_ROLENAME = "ALERTPUBLISHER" 
 APUB_ROLE_CONFIG = { }
@@ -60,10 +61,10 @@ RMAN_ROLENAME = "REPORTMANAGER"
 RMAN_ROLE_CONFIG = {
    'headlamp_database_host': "r2341-d5-us01.dssd.com:7432",
    'headlamp_database_user': 'rman',
-   'headlamp_database_password': HEADLAMP_DATABASE_PASSWORD,
+   'headlamp_database_password': RMAN_PASSWORD,
    'headlamp_database_type': 'postgresql',
    'headlamp_database_name': 'rman',
-   'headlamp_heapsize': '215964392',
+   'headlamp_heapsize': '268435456',
 }
 MGMT_SERVICENAME="MGMT"
 MGMT_SERVICE_CONFIG={}
@@ -73,9 +74,14 @@ MGMT_ROLE_CONFIG={}
   
 
 def deploy_management(manager, mgmt_servicename, mgmt_service_conf, mgmt_role_conf, amon_role_name, amon_role_conf, apub_role_name, apub_role_conf, eserv_role_name, eserv_role_conf, hmon_role_name, hmon_role_conf, smon_role_name, smon_role_conf, rman_role_name, rman_role_conf):
-   #mgmt = manager.create_mgmt_service(ApiServiceSetupInfo())
-   print "getting mgmt service object"
-   mgmt_service = manager.get_service()
+   #mgmt_service already exists
+
+   # 2 scenarios: if there is no cloudera management service installed: 
+   mgmt_service = manager.create_mgmt_service(ApiServiceSetupInfo())  
+   #mgmt_service = manager.get_service()
+
+   print "mgmt_service:", mgmt_service
+   print "mgmt_service config:", mgmt_service.get_config(view="Full")
    
    print "before autoconfgiure:"
    for group in mgmt_service.get_all_role_config_groups():
@@ -85,37 +91,37 @@ def deploy_management(manager, mgmt_servicename, mgmt_service_conf, mgmt_role_co
 
 
    # create roles. Note that host id may be different from host name (especially in CM 5). Look it it up in /api/v5/hosts
-   #mgmt_service.create_role(amon_role_name + "-1", "ACTIVITYMONITOR", CM_HOST)
-   #mgmt_service.create_role(apub_role_name + "-1", "ALERTPUBLISHER", CM_HOST)
-   #mgmt_service.create_role(eserv_role_name + "-1", "EVENTSERVER", CM_HOST)
-   #mgmt_service.create_role(hmon_role_name + "-1", "HOSTMONITOR", CM_HOST)
-   #mgmt_service.create_role(smon_role_name + "-1", "SERVICEMONITOR", CM_HOST)
+   mgmt_service.create_role(amon_role_name + "-1", "ACTIVITYMONITOR", CM_HOST)
+   mgmt_service.create_role(apub_role_name + "-1", "ALERTPUBLISHER", CM_HOST)
+   mgmt_service.create_role(eserv_role_name + "-1", "EVENTSERVER", CM_HOST)
+   mgmt_service.create_role(hmon_role_name + "-1", "HOSTMONITOR", CM_HOST)
+   mgmt_service.create_role(smon_role_name + "-1", "SERVICEMONITOR", CM_HOST)
    ##mgmt.create_role(nav_role_name + "-1", "NAVIGATOR", CM_HOST)
    ##mgmt.create_role(navms_role_name + "-1", "NAVIGATORMETADATASERVER", CM_HOST)
-   ##mgmt.create_role(rman_role_name + "-1", "REPORTSMANAGER", CM_HOST)
+   mgmt_service.create_role(rman_role_name + "-1", "REPORTSMANAGER", CM_HOST)
    
    # now configure each role   
- #  for group in mgmt_service.get_all_role_config_groups():
- #      if group.roleType == "ACTIVITYMONITOR":
- #          group.update_config(amon_role_conf)
- #      elif group.roleType == "ALERTPUBLISHER":
- #          group.update_config(apub_role_conf)
- #      elif group.roleType == "EVENTSERVER":
- #          group.update_config(eserv_role_conf)
- #      elif group.roleType == "HOSTMONITOR":
- #          group.update_config(hmon_role_conf)
- #      elif group.roleType == "SERVICEMONITOR":
- #          group.update_config(smon_role_conf)
+   for group in mgmt_service.get_all_role_config_groups():
+       if group.roleType == "ACTIVITYMONITOR":
+           group.update_config(amon_role_conf)
+       elif group.roleType == "ALERTPUBLISHER":
+           group.update_config(apub_role_conf)
+       elif group.roleType == "EVENTSERVER":
+           group.update_config(eserv_role_conf)
+       elif group.roleType == "HOSTMONITOR":
+           group.update_config(hmon_role_conf)
+       elif group.roleType == "SERVICEMONITOR":
+           group.update_config(smon_role_conf)
    # #   elif group.roleType == "NAVIGATOR":
    # #       group.update_config(nav_role_conf)
    # #   elif group.roleType == "NAVIGATORMETADATASERVER":
    # #       group.update_config(navms_role_conf)
-   # #   elif group.roleType == "REPORTSMANAGER":
-   # #       group.update_config(rman_role_conf)
+       elif group.roleType == "REPORTSMANAGER":
+           group.update_config(rman_role_conf)
    
    # now start the management service
-   #manager.auto_assign_roles()
-   #manager.auto_configure()
+   #mgmt_service.auto_assign_roles()
+   #mgmt_service.auto_configure()
    print "after autoconfigure:"
 
    for group in mgmt_service.get_all_role_config_groups():
@@ -123,7 +129,7 @@ def deploy_management(manager, mgmt_servicename, mgmt_service_conf, mgmt_role_co
      print "group_config:", group.get_config()
 
 
-
+   #reports manager not started; how to start manually? 
    mgmt_service.start().wait()
    
    return mgmt_service
