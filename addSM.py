@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 
-#add cloudera manager service
+#add test function
+# clean(); addSM() show sm added
 #https://github.com/cloudera/cm_api/blob/master/python/examples/auto-deploy/deploycloudera.py
 
 
