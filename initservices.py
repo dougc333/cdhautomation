@@ -26,7 +26,7 @@ def checkServices(api):
   print "all services:", all_services 
   host_templates = cluster.get_all_host_templates()
   print "host_templates:", host_templates 
-
+  
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
