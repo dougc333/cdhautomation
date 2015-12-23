@@ -1,5 +1,6 @@
 #!/bin/bash -p
 
+#call this before making data in each datnode for impala benchmark
 # the datanodes have to be in this file
 
 datanodes=('r2341-d5-us02' 

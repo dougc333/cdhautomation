@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# test creating hdd cluster; hardcoded tehe mount points on /testdir and /testdir2
 
 from cm_api.api_client import ApiResource, ApiException
 
