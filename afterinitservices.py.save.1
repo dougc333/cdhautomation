@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-#installs hdfs, hive, impala, yarn
-
+#reverify we need the empty roles
 
 from cm_api.api_client import ApiResource
 from cm_api.endpoints.clusters import ApiCluster
@@ -67,7 +66,7 @@ HDFS_DATANODE_HOSTS = list(CLUSTER_HOSTS)
 #dfs_datanode_failed_volumes_tolerated must be less than the number of different data dirs (ie volumes) in dfs_data_dir_list
 HDFS_DATANODE_CONFIG = {
   'dfs_data_dir_list': '/testdir/dfs/dn',
-  'dfs_datanode_handler_count': 30,
+dfs.client.domain.socket.data.traffic  'dfs_datanode_handler_count': 30,
   #'dfs_datanode_du_reserved': 42949672960,
   'dfs_datanode_du_reserved': 1073741824,
   'dfs_datanode_failed_volumes_tolerated': 0,
@@ -89,7 +88,7 @@ HDFS_GATEWAY_CONFIG = {
   #'dfs.client.read.shortcircuit':'true',
   #'dfs.client.read.shortcircuit.skip.checksum':'true',
   #'dfs.client.domain.socket.data.traffic':'false',
-  #'dfs.client.use.legacy.blockreader':'false',
+  'dfs.client.use.legacy.blockreader':'false',
   #'dfs.client.use.datanode.hostname':'false'
 }
 
@@ -102,7 +101,7 @@ HDFS_HTTP = {}
 
 YARN_SERVICE_NAME = "YARN"
 YARN_SERVICE_CONFIG = {
-  'hdfs_service': 'HDFS'
+  'hdfs_service': 'hdfs'
 }
 YARN_RM_HOST = CM_HOST
 YARN_RM_CONFIG = {u'yarn_scheduler_maximum_allocation_mb': u'8192' }
@@ -128,43 +127,19 @@ HIVE_SERVICE_CONFIG={
   u'hive_metastore_database_host': u'r2341-d5-us01.dssd.com', 
   u'hive_metastore_database_name': u'hive', 
   u'hive_metastore_database_type': u'postgresql', 
-  u'mapreduce_yarn_service': u'YARN'
+  u'mapreduce_yarn_service': u'yarn'
 }
 
+HIVE_WEBHCAT={}
+HIVE_GATEWAY={}
+HIVESERVER2={}
+HIVE_METASTORE={}
 
-HIVE_SERVICE_NAME = "HIVE"
-
-HIVE_HMS_HOST = CM_HOST
-HIVE_HMS_CONFIG = {
-  'hive_metastore_java_heapsize': 85306784,
-}
-HIVE_HS2_HOST = CM_HOST
-HIVE_HS2_CONFIG = { }
-HIVE_WHC_HOST = CM_HOST
-HIVE_WHC_CONFIG = { }
-HIVE_GW_HOSTS = list(CLUSTER_HOSTS)
-HIVE_GW_CONFIG = { }
-
-
-
-
-
-IMPALA_SERVICE_NAME = "IMPALA"
-IMPALA_SERVICE_CONFIG = {
-  'hdfs_service': HDFS_SERVICE_NAME,
-  'hive_service': HIVE_SERVICE_NAME,
-}
-
-IMPALA_SS_HOST = CM_HOST
-IMPALA_SS_CONFIG = { }
-IMPALA_CS_HOST = CM_HOST
-IMPALA_CS_CONFIG = { }
-IMPALA_ID_HOSTS = list(CLUSTER_HOSTS)
-IMPALA_ID_CONFIG = { }
-
-IMPALA_SERVICE_NAME = "IMPALA"
+IMPALA_SERVICE_CONFIG={u'hdfs_service': u'hdfs', u'hive_service': u'hive'}
+STATESTORE={}
 IMPALAD={u'scratch_dirs': u'/testdir/impala/impalad', u'impalad_memory_limit': u'86536880128'}
-
+CATALOG={}
+LLAMA={}
 
 
 
@@ -366,15 +341,6 @@ def init_hdfs(hdfs_service, hdfs_name):
    hdfs_service.start().wait()
 
 
-def init_hive(hive_service):
-   hive_service.create_hive_metastore_database()
-   hive_service.create_hive_metastore_tables()
-   hive_service.create_hive_warehouse()
-   #don't think that the create_hive_userdir call is needed as the create_hive_warehouse already creates it
-   #hive_service.create_hive_userdir()
-
-
-
 def main():
   print "parcels downloaded, verify you can see the services in add services"
   print "and parcels are activated for CDH, "
@@ -382,8 +348,8 @@ def main():
   print "api:",api
   inspect_hosts(api)
   CLUSTER = api.get_cluster("HDDTest") 
-  #hdfs_service = deploy_hdfs(CLUSTER, HDFS_SERVICE_NAME, HDFS_SERVICE_CONFIG, HDFS_NAMENODE_SERVICE_NAME, HDFS_NAMENODE_HOST, HDFS_NAMENODE_CONFIG, HDFS_SECONDARY_NAMENODE_HOST, HDFS_SECONDARY_NAMENODE_CONFIG, HDFS_DATANODE_HOSTS, HDFS_DATANODE_CONFIG, HDFS_GATEWAY_HOSTS, HDFS_GATEWAY_CONFIG)
-  #print "Deployed HDFS service " + HDFS_SERVICE_NAME + " using NameNode on " + HDFS_NAMENODE_HOST + ", SecondaryNameNode on " + HDFS_SECONDARY_NAMENODE_HOST + ", and DataNodes running on: "
+  hdfs_service = deploy_hdfs(CLUSTER, HDFS_SERVICE_NAME, HDFS_SERVICE_CONFIG, HDFS_NAMENODE_SERVICE_NAME, HDFS_NAMENODE_HOST, HDFS_NAMENODE_CONFIG, HDFS_SECONDARY_NAMENODE_HOST, HDFS_SECONDARY_NAMENODE_CONFIG, HDFS_DATANODE_HOSTS, HDFS_DATANODE_CONFIG, HDFS_GATEWAY_HOSTS, HDFS_GATEWAY_CONFIG)
+  print "Deployed HDFS service " + HDFS_SERVICE_NAME + " using NameNode on " + HDFS_NAMENODE_HOST + ", SecondaryNameNode on " + HDFS_SECONDARY_NAMENODE_HOST + ", and DataNodes running on: "
   #PRETTY_PRINT.pprint(HDFS_DATANODE_HOSTS)
   #init_hdfs(hdfs_service, HDFS_SERVICE_NAME)
   #print "Initialized HDFS service"
@@ -392,20 +358,7 @@ def main():
   yarn_service = deploy_yarn(CLUSTER, YARN_SERVICE_NAME, YARN_SERVICE_CONFIG, YARN_RM_HOST, YARN_RM_CONFIG, YARN_JHS_HOST, YARN_JHS_CONFIG, YARN_NM_HOSTS, YARN_NM_CONFIG, YARN_GW_HOSTS, YARN_GW_CONFIG)
   print "Deployed YARN service " + YARN_SERVICE_NAME + " using ResourceManager on " + YARN_RM_HOST + ", JobHistoryServer on " + YARN_JHS_HOST + ", and NodeManagers on "
   #PRETTY_PRINT.pprint(YARN_NM_HOSTS)
-  yarn_service.start().wait()
-  print "deploying hive"
-  hive_service = deploy_hive(CLUSTER, HIVE_SERVICE_NAME, HIVE_SERVICE_CONFIG, HIVE_HMS_HOST, HIVE_HMS_CONFIG, HIVE_HS2_HOST, HIVE_HS2_CONFIG, HIVE_WHC_HOST, HIVE_WHC_CONFIG, HIVE_GW_HOSTS, HIVE_GW_CONFIG)
-  print "Depoyed Hive service " + HIVE_SERVICE_NAME + " using HiveMetastoreServer on " + HIVE_HMS_HOST + " and HiveServer2 on " + HIVE_HS2_HOST
-  hive_service.start().wait()
-  init_hive(hive_service)
-  print "Initialized Hive service"
 
-
-  impala_service = deploy_impala(CLUSTER, IMPALA_SERVICE_NAME, IMPALA_SERVICE_CONFIG, IMPALA_SS_HOST, IMPALA_SS_CONFIG, IMPALA_CS_HOST, IMPALA_CS_CONFIG, IMPALA_ID_HOSTS, IMPALA_ID_CONFIG)
-  print "Deployed Impala service " + IMPALA_SERVICE_NAME + " using StateStore on " + IMPALA_SS_HOST + ", CatalogServer on " + IMPALA_CS_HOST + ", and ImpalaDaemons on "
-  #PRETTY_PRINT.pprint(IMPALA_ID_HOSTS)
-  impala_service.start().wait()
-
-
+  
 if __name__ == '__main__':
    main()

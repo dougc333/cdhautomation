@@ -84,19 +84,6 @@ def config_dssd_datanode(hdfs_service):
   print "-----------------end_hdfs_roles------------------------------------"
 
 
- 
-
-
-def installHBase():
-  """
-  """
-
-
-def installImpala():
-  """
-  """
-  
-
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
