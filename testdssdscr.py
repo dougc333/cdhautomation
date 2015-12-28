@@ -113,6 +113,7 @@ def parcels(api):
 def add_parcels(api):
    """
    """  
+   cm = api.get_cloudera_manager()
    for cluster in api.get_all_clusters():
       # get and list all available parcels
       parcels_dict={}
@@ -169,7 +170,8 @@ def add_parcels(api):
       print "parcel activated" , distMe.product + ", version:", distMe.version + "ACTIVATED"
       
       # set vm.swappiness and thp
-      config_swap_and_thp()
+      # this part below does not work, run ./swappy.sh manually 
+      #config_swap_and_thp()
 
       # inspect hosts
       print "inspecting hosts",

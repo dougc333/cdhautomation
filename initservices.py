@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#adds HDFS, Impala,Hive, YARN services
+#adds HDFS
 #install services; print out role config groups, fix customization for each RCG
 #redo w/install services
 
@@ -35,10 +35,10 @@ def checkServices(api):
   print "host_templates:", cluster.get_all_host_templates()
   
 #start wtih check hosts, run swappy.sh outside of python till pexpect fixed
-def add_hdfs():
-  """
-  """
-
+#def add_hdfs():
+#  """
+#  """
+#  #this was moved to afterinitservices deployhdfs
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
@@ -57,7 +57,7 @@ def main():
    checkServices(api)
    add_hosts(api)
    add_parcels(api)
-   add_hdfs(api)
+#   add_hdfs(api)
 
 if __name__=='__main__':
   main()

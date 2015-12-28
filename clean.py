@@ -52,6 +52,24 @@ def cm_args_parser():
   parser.add_argument("--cm-password", default="admin", help="CM password")
   return parser
 
+
+def clean_all(api):
+  """
+  """
+  cm = api.get_cloudera_manager()
+  stop_and_remove_services(api)
+  cms = cm.get_service()
+  print "cms:", cms
+  cms.stop().wait()
+  cm.delete_mgmt_service()
+
+
+
+
+def clean_hdfs(api):
+  """
+  """
+  
  
 
 def main():
@@ -63,12 +81,8 @@ def main():
       username=args.cm_user, password=args.cm_password)
   print "done."
 
-  cm = api.get_cloudera_manager()
-  stop_and_remove_services(api)
-  cms = cm.get_service()
-  print "cms:", cms
-  cms.stop().wait()
-  cm.delete_mgmt_service()
+  clean_all(api)
+
 
 if __name__ == '__main__':
   main()
