@@ -28,39 +28,18 @@ code_drop_6_repo=[
   'http://r2341-d5-us48.dssd.com/parcels/dssd/'
 ]
 
-service_types_and_names = {
-			   "ZOOKEEPER" : "ZooKeeper",
-			   "HDFS" : "HDFS",
-			   "YARN" : "YARN(MR2 Included",
-			   "HBASE" : "HBase",
-			   "HIVE" : "HIVE",
-			   "IMPALA" : "IMPALA",
-			   "SOLR" : "SOLR"
-			    }
-
-hosts = [ 'r2341-d5-us01',
-          'r2341-d5-us02',
-          'r2341-s5-us03',
-          'r2341-d5-us04' ]
 
 def setDSSD(boolValue,api):
   cm=ClouderaManager(api)
   cm.update_config({"dssd_enabled": boolValue})
   
          
-def add_cloudera_mgmt_service(api):
-  #verify the hosts are already registerd b/c we setup cloudera-agent individually
-  #on the beta we shouldnt have to do this, we should be able to use the Cloudera Manager repo
-  cm = ClouderaManager(api)
-  #dont call host_install b/c Cloudera agent already running
-  service_setup_info = ApiServiceSetupInfo("Cloudera Management Service","MGMT")
-  create_mgmt_service(service_setup_info)
-  #might not need the license
-  #with open("/root/dssdemc_dev_cloudera_enterprise_license.txt","r") as ltext:
-  #   file_contents = ltext.read()
-  
+
 
 def add_hosts(api):
+"""
+ This function assumes addSM has been run
+"""
    for cluster in api.get_all_clusters():
       host_list = api.get_all_hosts(view="full")
       print host_list.to_json_dict(preserve_ro=True)
@@ -71,27 +50,6 @@ def add_hosts(api):
           hostId_list.append(host_list.to_json_dict(preserve_ro=True)["items"][i]["hostId"])
       cluster.add_hosts(hostId_list)
 
-def get(api):
-  for cluster in api_get_all_clusters():
-     host_list = cluster.list_hosts
-  print "host_list:"
-  print host_list
-  print "getting component fields"
-  cluster = api.get_cluster("Cluster 1")
-  impala = cluster.get_service("impala")
-  impala_config = impala.get_config(view="full")
-  print "--------------config objects------------"
-  print impala_config
-  impala_roles = impala.get_all_roles(view="full")
-  print "--------------------roles----------------"
-  print impala_roles 
-  impala_role_config_groups = impala.get_all_role_config_groups()
-  for ircg in impala_role_config_groups:
-     print ircg
-  # print metrics, need to modify to use the endpoint instead
-  #impala_metrics = impala.get_metrics()
-  #for m in impala_metrics:
-  #  print "%s (%s)" % (m.name, m.unit)
   
 
 def parcels(api):
@@ -189,21 +147,6 @@ def add_parcels(api):
  
       
 
-def install_hdd_hdfs():
-  """
-  """
-  
-
-
-
-def config_swap_and_thp():
-  print "start bash shell script for swap and thp"
-  subprocess.call("swappy.sh")
-  print "finished swap and thp settings"        
-
-
-
-
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
@@ -242,16 +185,11 @@ def main():
   print "connecting to host:" + args.cm_host + "..."
   api = ApiResource(args.cm_host, username=args.cm_user, password=args.cm_password)
   print "done....."
-  clean(api) 
-  setDSSD(False, api)
-  make_cluster("HDDTest", api)
-  add_parcels(api)
   #setDSSD(True, api)
-  #make_cluster("D5Test",api)
-  
+  #make_cluster("HDDTest", api)
+  #add_parcels(api)
+
 
  
-
-
 if __name__ == '__main__':
   main()

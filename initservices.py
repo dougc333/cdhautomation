@@ -24,21 +24,19 @@ from testdssdscr import add_hosts,add_parcels
 
 
 
-def checkServices(api):
+def createCluster(api):
+"""
+  creates either HDDTest or DSSDTest; should see this in Cloudera Manager UI
+"""
   if len (api.get_all_clusters()) == 0:
      print "creating cluster HDDTest"
-     api.create_cluster("HDDTest", version="CDH5")
+     cm = api.get_cloudera_manager()
+     if (cm.get_config().get(u"DSSD_ENABLED") == true):
+       api.create_cluster("DSSDTest",version = "CDH5"
+     else:
+       api.create_cluster("HDDTest", version="CDH5")
    
-  cluster=api.get_cluster("HDDTest")
-  print "service_types:", cluster.get_service_types()
-  print "all services:", cluster.get_all_services(view="Full")
-  print "host_templates:", cluster.get_all_host_templates()
   
-#start wtih check hosts, run swappy.sh outside of python till pexpect fixed
-#def add_hdfs():
-#  """
-#  """
-#  #this was moved to afterinitservices deployhdfs
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
@@ -54,10 +52,10 @@ def main():
    print "connecting to host:" +args.cm_host + "..."
    api = ApiResource(args.cm_host, username=args.cm_user, password = args.cm_password)
    print "done...."
-   checkServices(api)
+   checkCluster(api)
    add_hosts(api)
    add_parcels(api)
-#   add_hdfs(api)
+
 
 if __name__=='__main__':
   main()
