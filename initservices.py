@@ -25,14 +25,14 @@ from testdssdscr import add_hosts,add_parcels
 
 
 def createCluster(api):
-"""
+  """
   creates either HDDTest or DSSDTest; should see this in Cloudera Manager UI
-"""
+  """
   if len (api.get_all_clusters()) == 0:
-     print "creating cluster HDDTest"
+     print "creating cluster"
      cm = api.get_cloudera_manager()
-     if (cm.get_config().get(u"DSSD_ENABLED") == true):
-       api.create_cluster("DSSDTest",version = "CDH5"
+     if (cm.get_config().get(u"DSSD_ENABLED") == "true"):
+       api.create_cluster("DSSDTest",version = "CDH5")
      else:
        api.create_cluster("HDDTest", version="CDH5")
    
@@ -52,7 +52,7 @@ def main():
    print "connecting to host:" +args.cm_host + "..."
    api = ApiResource(args.cm_host, username=args.cm_user, password = args.cm_password)
    print "done...."
-   checkCluster(api)
+   createCluster(api)
    add_hosts(api)
    add_parcels(api)
 

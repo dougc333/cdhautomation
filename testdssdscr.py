@@ -33,13 +33,12 @@ def setDSSD(boolValue,api):
   cm=ClouderaManager(api)
   cm.update_config({"dssd_enabled": boolValue})
   
-         
-
 
 def add_hosts(api):
-"""
- This function assumes addSM has been run
-"""
+   """
+   This function assumes addSM has been run and the cluster exists
+   This function assumes 
+   """
    for cluster in api.get_all_clusters():
       host_list = api.get_all_hosts(view="full")
       print host_list.to_json_dict(preserve_ro=True)
@@ -52,20 +51,49 @@ def add_hosts(api):
 
   
 
-def parcels(api):
-  cm_config=api.get_cloudera_manager().get_config(view="full")
-  repo_config=cm_config['REMOTE_PARCEL_REPO_URLS']
+def check_parcel_reposs(api):
+  repo_config=api.get_cloudera_manager().get_config(view="Full")['REMOTE_PARCEL_REPO_URLS']
   print repo_config
-  # adding a parcel repo
-  value = repo_config.value #or repo_config.default
-  # value is a comma-separated list
-  #parcel_repo="r2341-d5-us48/parcels/personal_parcels/dougc"
-  #value += ',' + parcel_repo
-  api.get_cloudera_manager().update_config({
-  'REMOTE_PARCEL_REPO_URLS': value})
-  # wait to make sure parcels are refreshed
-  time.sleep(10)
-  #verify in console the urls are added
+  # test for code drop 6 repo
+  if 'http://dssd:dssd@bits.cloudera.com/c515c923/' in repo_config:
+    print 'repo code drop 6 in parcels'
+  else:
+    api.get_cloudera_manager.update_config({'REMOTE_PARCEL_REPO_URLS':repo_config.join(code_drop_6_repo)})
+    time.sleep(10)
+
+def download_dist_activate_parcel(parcel):
+  """
+  input: parcel object, output: should see parcel activated under Cloudera Manager UI
+  """
+  print "Downloading"
+      cmd = distMe.start_download()
+      while distMe.stage != "DOWNLOADED":
+        sleep(5)
+        print("."),
+        distMe=get_parcel(api, distMe.product, distMe.version, cluster.name)
+      print "parcel downloaded", distMe.product+" ,version:" + distMe.version + "DOWNLOADED"
+
+
+      cmd = distMe.start_distribution()
+      print "Distributing"
+      while distMe.stage != "DISTRIBUTED":
+        sleep(5)
+        print("."),
+        sys.stdout.flush()
+        distMe= get_parcel(api,distMe.product, distMe.version, cluster.name)
+      print "parcel distributed" , distMe.product + ", version:", distMe.version + "DISTRIBUTED"
+
+      cmd = distMe.activate()
+      if cmd.success != True:
+        print "activation failed!!!"
+        exit(0)
+
+      print "Activating"
+      while distMe.stage != "ACTIVATED":
+        sleep(5)
+        print".",
+        distMe = get_parcel(api, distMe.product, distMe.version, cluster.name)
+      print "parcel activated" , distMe.product + ", version:", distMe.version + "ACTIVATED"
 
  
 def add_parcels(api):
@@ -90,47 +118,21 @@ def add_parcels(api):
           print "found DSSD_SCR"
           parcels_dict[p.product+p.version]=p 
       print "num parcels to distribute and activate:", len(parcels_dict) 
-      print parcels_dict
-       
+      print "parcels_dict before downloading CDH: ",parcels_dict
+      
    
       distMe = parcels_dict.get('CDH5.6.0-1.cdh5.6.0.p0.70')
       print "found CDH first, we update this first:", distMe.product+" ,version:"+distMe.version
-      
-      
-      print "Downloading"
-      cmd = distMe.start_download()
-      while distMe.stage != "DOWNLOADED":
-        sleep(5)
-        print("."),
-        distMe=get_parcel(api, distMe.product, distMe.version, cluster.name)
-      print "parcel downloaded", distMe.product+" ,version:" + distMe.version + "DOWNLOADED"      
-
-   
-      cmd = distMe.start_distribution()
-      print "Distributing"
-      while distMe.stage != "DISTRIBUTED":
-        sleep(5)
-        print("."),
-        sys.stdout.flush()
-        distMe= get_parcel(api,distMe.product, distMe.version, cluster.name)
-      print "parcel distributed" , distMe.product + ", version:", distMe.version + "DISTRIBUTED"
-      
-      cmd = distMe.activate()
-      if cmd.success != True:
-        print "activation failed!!!"
-        exit(0)
-
-      print "Activating"
-      while distMe.stage != "ACTIVATED":
-        sleep(5) 
-        print".",
-        distMe = get_parcel(api, distMe.product, distMe.version, cluster.name) 
-      print "parcel activated" , distMe.product + ", version:", distMe.version + "ACTIVATED"
+      download_dist_activate_parcel(parcel)      
+      if cm.get_config()[u"DSSD_ENABLED"]:
+        #download the other parcels in the dictionary minus the CDH one which should be updated
+        del parcels_dict['CDH5.6.0-1.cdh5.6.0.p0.70']
+        for p in parcels_dict.keys():
+          download_dist_activate_parcel(parcels_dict.get(p))
       
       # set vm.swappiness and thp
       # this part below does not work, run ./swappy.sh manually 
-      #config_swap_and_thp()
-
+      #config_swap_and_thp() 
       # inspect hosts
       print "inspecting hosts",
       cmd = cm.inspect_hosts()
