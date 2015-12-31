@@ -1,7 +1,8 @@
 cloudera question: how to add final tag in after value tag? 
 
 Contains Cloudera Manager automation code
-
+current status: both HDD and DSSD mode work. Have to fix the OOM configuration and iterate
+through the error messages for Cloudera Manager 
 
 Debugging Notes: 
   when configuring HDFS through the API, you have to create a configuraiton in the api which the cloudera manager will create the exact hdfs-site.xml and core-site.xml files you need

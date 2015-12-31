@@ -20,7 +20,7 @@ from cm_api.endpoints.role_config_groups import ApiRoleConfigGroup
 from cm_api.endpoints.roles import ApiRole
 from time import sleep
 
-from testdssdscr import add_hosts,add_parcels
+from testdssdscr import add_hosts,add_parcels, check_parcel_repos,clean_parcel_repo
 
 
 
@@ -53,6 +53,8 @@ def main():
    api = ApiResource(args.cm_host, username=args.cm_user, password = args.cm_password)
    print "done...."
    createCluster(api)
+   #clean_parcel_repo(api)
+   #check_parcel_repos(api)
    add_hosts(api)
    add_parcels(api)
 

@@ -39,7 +39,22 @@ HDFS_SERVICE_NAME = "HDFS"
 HDFS_SERVICE_CONFIG = {
   'dfs_replication': 3,
   'dfs_permissions': 'false',
-  'dfs_block_local_path_access_user': 'impala,hbase,mapred,spark'
+  #'io_compression_codecs': None,
+  #'dfs_namenode_acls_enabled': None,
+  #'hadoop_rpc_protection':None,
+  #'hadoop_security_authorization':None,
+  #'hadoop_sercurity_authentication':None,
+  #'hadoop_ssl_require_client.cert':None,
+  #'dfs_client_use_datanode_hostname':None,
+  #'dfs_block_local_path_access_user': 'impala,hbase,mapred,spark'
+}
+
+DSSD_HDFS_SERVICE_CONFIG={
+ u'com_dssd_hadoop_floodds_usablecapacity': '100000000000000',
+ u'com_dssd_hadoop_floodds_volume': 'twu_vol',
+ u'dfs_permissions': 'false',
+ u'hdfs_service_config_safety_valve':  u'<property>\n<name>fs.defaultFS</name>\n<value>hdfs://r2341-d5-us01.dssd.com:8020</value>\n</property>',
+ u'dfs_block_local_path_access_user': 'impala,hbase,mapred,spark'
 }
 
 hdfs_service_config={
@@ -276,14 +291,247 @@ u'hdfs_ssl_client_safety_valve': None,
 u'service_config_suppression_redaction_policy_validator': None
 }
 
+dssd_hdfs_service_config={
+u'com_dssd_hadoop_floodds_usablecapacity': None, 
+u'service_config_suppression_core_site_safety_valve': None, 
+u'service_config_suppression_navigator_client_config_safety_valve': None, 
+u'dfs_ha_fencing_methods': None, 
+u'navigator_client_max_num_audit_log': None, 
+u'navigator_audit_log_max_file_size': None, 
+u'service_config_suppression_yarn_proxy_user_groups_list': None, 
+u'service_config_suppression_dfs_ha_proxy_provider': None, 
+u'dfs_permissions': None, 
+u'service_config_suppression_hdfs_service_env_safety_valve': None, 
+u'process_username': None, 
+u'hue_proxy_user_groups_list': None,
+u'hadoop_group_mapping_ldap_keystore_passwd': None, 
+u'service_config_suppression_flume_proxy_user_groups_list': None, 
+u'service_config_suppression_failovercontroller_count_validator': None, 
+u'service_config_suppression_kerberos_princ_name': None, 
+u'hue_proxy_user_hosts_list': None, 
+u'service_config_suppression_oozie_proxy_user_groups_list': None, 
+u'service_config_suppression_hadoop_authorized_admin_users': None, 
+u'service_config_suppression_hdfs_replication_env_safety_valve': None, 
+u'firehose_hdfs_canary_directory': None, 
+u'audit_event_log_dir': None, 
+u'hadoop_security_group_mapping': None, 
+u'service_config_suppression_hadoop_http_auth_cookie_domain': None, 
+u'yarn_proxy_user_groups_list': None, 
+u'service_config_suppression_namenode_count_validator': None, 
+u'oozie_proxy_user_groups_list': None, 
+u'service_config_suppression_http_proxy_user_groups_list': None, 
+u'hadoop_authorized_users': None, 
+u'service_config_suppression_hadoop_ssl_validator': None, 
+u'service_config_suppression_navigator_event_tracker': None, 
+u'hadoop_group_mapping_ldap_bind_user': None, 
+u'enable_alerts': None, 
+u'service_config_suppression_balancer_count_validator': None, 
+u'ssl_client_truststore_password': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_bind_user': None, 
+u'hadoop_group_mapping_ldap_bind_passwd': None, 
+u'navigator_audit_queue_policy': None, 
+u'service_config_suppression_nameservice_mountpoints_validator': None, 
+u'catch_events': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_base': None, 
+u'service_config_suppression_short_circuit_read_validator': None, 
+u'redaction_policy_enabled': None, 
+u'core_site_safety_valve': None, 
+u'service_config_suppression_gateway_count_validator': None, 
+u'service_config_suppression_hdfs_authentication_and_authorization_validator': None, 
+u'service_config_suppression_smon_proxy_user_groups_list': None, 
+u'service_config_suppression_dfs_block_local_path_access_user': None, 
+u'service_config_suppression_process_groupname': None, 
+u'hdfs_datanodes_healthy_thresholds': None, 
+u'service_config_suppression_dfs_ha_fencing_ssh_private_key_files': None, 
+u'dfs_webhdfs_enabled': None, 
+u'hue_kerberos_principal_shortname': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_group_filter': None, 
+u'service_config_suppression_hue_kerberos_principal_shortname': None, 
+u'smon_derived_configs_safety_valve': None, 
+u'dfs_ha_proxy_provider': None, 
+u'hadoop_http_auth_cookie_domain': None, 
+u'service_config_suppression_ssl_server_keystore_location': None, 
+u'hadoop_group_mapping_ldap_base': None, 
+u'hdfs_proxy_user_hosts_list': None, 
+u'service_config_suppression_nfsgateway_count_validator': None, 
+u'service_health_suppression_hdfs_blocks_with_corrupt_replicas': None, 
+u'navigator_audit_event_filter': None, 
+u'hadoop_authorized_groups': None, 
+u'dfs_encrypt_data_transfer_cipher_keybits': None, 
+u'ssl_server_keystore_keypassword': None, 
+u'hive_proxy_user_groups_list': None, 
+u'oozie_proxy_user_hosts_list': None, 
+u'service_health_suppression_hdfs_free_space_remaining': None, 
+u'smon_proxy_user_hosts_list': None, 
+u'hdfs_sentry_sync_path_prefixes': None, 
+u'mapred_proxy_user_groups_list': None, 
+u'hdfs_service_env_safety_valve': None, 
+u'sentry_authorization_provider_hdfs_group': None, 
+u'extra_auth_to_local_rules': None, 
+u'ssl_server_keystore_password': None, 
+u'service_config_suppression_hadoop_policy_config_safety_valve': None, 
+u'service_config_suppression_hdfs_encryption_validator': None, 
+u'service_config_suppression_hdfs_service_config_safety_valve': None, 
+u'hadoop_secure_web_ui': None, 
+u'hdfs_replication_haoop_env_sh_safety_valve': None, 
+u'hdfs_proxy_user_groups_list': None, 
+u'hadoop_rpc_protection': None, 
+u'service_config_suppression_hue_proxy_user_hosts_list': None, 
+u'ssl_client_truststore_location': None, 
+u'hadoop_authorized_admin_users': None, 
+u'hdfs_missing_blocks_thresholds': None, 
+u'hdfs_namenode_activation_startup_tolerance': None, 
+u'com_dssd_hadoop_floodds_volume': u'twu_vol', 
+u'redaction_policy': None, 
+u'yarn_proxy_user_hosts_list': None, 
+u'httpfs_proxy_user_groups_list': None, 
+u'flume_proxy_user_groups_list': None, 
+u'mapred_proxy_user_hosts_list': None, 
+u'smon_client_config_overrides': None, 
+u'service_triggers': None, 
+u'service_config_suppression_hdfs_proxy_user_groups_list': None, 
+u'service_config_suppression_process_username': None, 
+u'hdfs_hadoop_ssl_enabled': None, 
+u'trusted_realms': None, 
+u'service_health_suppression_hdfs_failover_controllers_healthy': None, 
+u'service_config_suppression_smon_proxy_user_hosts_list': None,
+u'dfs_client_use_datanode_hostname': None, 
+u'failover_controllers_healthy_enabled': None, 
+u'hadoop_group_mapping_ldap_member_attr': None, 
+u'dfs_block_local_path_access_user': None, 
+u'dfs_ha_fencing_cloudera_manager_timeout_millis': None, 
+u'navigator_audit_enabled': None, 
+u'dfs_image_transfer_bandwidthPerSec': None, 
+u'service_config_suppression_mapred_proxy_user_groups_list': None, 
+u'hdfs_user_to_impersonate': None, 
+u'hadoop_group_mapping_ldap_keystore': None, 
+u'service_config_suppression_hdfs_sentry_sync_path_prefixes': None, 
+u'service_config_suppression_navigator_audit_event_filter': None, 
+u'service_config_suppression_ssl_client_truststore_password': None, 
+u'dfs_permissions_supergroup': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_url': None, 
+u'smon_proxy_user_groups_list': None, 
+u'service_config_suppression_hadoop_authorized_groups': None, 
+u'service_config_suppression_httpfs_proxy_user_hosts_list': None, 
+u'dfs_replication_min': None, 
+u'service_config_suppression_hdfs_hadoop_group_name': None, 
+u'service_config_suppression_ssl_server_keystore_password': None, 
+u'service_config_suppression_single_user_mode_override_validator': None, 
+u'dfs_replication_max': None, 
+u'service_config_suppression_smon_client_config_overrides': None, 
+u'HTTP_proxy_user_hosts_list': None, 
+u'firehose_hdfs_canary_directory_permissions': None, 
+u'hadoop_security_authorization': None, 
+u'kms_service': None, 
+u'hadoop_group_mapping_ldap_group_name_attr': None, 
+u'service_config_suppression_httpfs_proxy_user_groups_list': None, 
+u'hdfs_active_namenode_detecton_window': None, 
+u'service_config_suppression_flume_proxy_user_hosts_list': None, 
+u'dfs_replication': None, 
+u'HTTP_proxy_user_groups_list': None, 
+u'hdfs_hadoop_group_name': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_user_filter': None, 
+u'service_config_suppression_dfs_ha_fencing_methods': None, 
+u'service_config_suppression_hive_proxy_user_hosts_list': None, 
+u'service_config_suppression_dfs_permissions_supergroup': None, 
+u'dfs_namenode_acls_enabled': None, 
+u'service_config_suppression_service_triggers': None, 
+u'service_config_suppression_io_compression_codecs': None, 
+u'hadoop_group_mapping_ldap_user_filter': None, 
+u'ssl_server_keystore_location': None, 
+u'service_config_suppression_journalnode_count_validator': None, 
+u'service_config_suppression_hdfs_proxy_user_hosts_list': None, 
+u'service_config_suppression_firehose_hdfs_canary_directory_permissions': None, 
+u'navigator_event_tracker': None, 
+u'service_config_suppression_firehose_hdfs_canary_directory': None, 
+u'hdfs_replication_env_safety_valve': None, 
+u'dfs_block_size': None, 
+u'service_config_suppression_hue_proxy_user_groups_list': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_keystore_passwd': None, 
+u'service_config_suppression_hdfs_user_home_dir': None, 
+u'dfs_encrypt_data_transfer_algorithm': None, 
+u'hdfs_under_replicated_blocks_thresholds': None, 
+u'service_health_suppression_hdfs_data_nodes_healthy': None, 
+u'hdfs_service_config_safety_valve': None, 
+u'service_config_suppression_yarn_proxy_user_hosts_list': None, 
+u'service_health_suppression_hdfs_canary_health': None, 
+u'dfs_encrypt_data_transfer': None, 
+u'service_config_suppression_hdfs_ssl_client_safety_valve': None, 
+u'service_config_suppression_httpfs_count_validator': None, 
+u'service_config_suppression_secondarynamenode_count_validator': None, 
+u'dfs_client_file_block_storage_locations_timeout': None, 
+u'service_config_suppression_sentry_authorization_provider_hdfs_group': None, 
+u'io_compression_codecs': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_member_attr': None, 
+u'service_config_suppression_nameservice_namenodes_heap_size_validator': None, 
+u'hadoop_security_authentication': None, 
+u'service_config_suppression_dfs_replication': None, 
+u'hadoop_policy_config_safety_valve': None, 
+u'service_config_suppression_redaction_policy': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_bind_passwd': None, 
+u'hdfs_namenode_health_enabled': None, 
+u'hdfs_ssl_server_safety_valve': None, 
+u'hdfs_user_home_dir': None, 
+u'service_health_suppression_hdfs_missing_blocks': None, 
+u'dfs_data_transfer_protection': None, 
+u'service_config_suppression_hadoop_authorized_users': None, 
+u'flume_proxy_user_hosts_list': None, 
+u'hadoop_group_mapping_ldap_url': None, 
+u'dfs_ha_fencing_ssh_connect_timeout': None, 
+u'hdfs_sentry_sync_enable': None, 
+u'httpfs_proxy_user_hosts_list': None, 
+u'enable_config_alerts': None, 
+u'zookeeper_service': None, 
+u'service_config_suppression_smon_derived_configs_safety_valve': None, 
+u'service_config_suppression_com_dssd_hadoop_floodds_volume': None, 
+u'service_config_suppression_hadoop_authorized_admin_groups': None, 
+u'service_config_suppression_mapred_proxy_user_hosts_list': None, 
+u'dfs_image_transfer_timeout': None, 
+u'service_config_suppression_auto_failover_validator': None, 
+u'kerberos_princ_name': None, 
+u'service_config_suppression_nameservice_checkpoint_configuration_validator': None, 
+u'service_config_suppression_oozie_proxy_user_hosts_list': None, 
+u'service_config_suppression_http_proxy_user_hosts_list': None, 
+u'process_groupname': None, 
+u'hive_proxy_user_hosts_list': None, 
+u'service_config_suppression_trusted_realms': None, 
+u'service_config_suppression_nfs_ha_validator': None, 
+u'service_config_suppression_dssddatanode_count_validator': None, 
+u'log_event_retry_frequency': None, 
+u'service_health_suppression_hdfs_ha_namenode_health': None, 
+u'dfs_umaskmode': None, 
+u'hdfs_free_space_thresholds': None, 
+u'service_config_suppression_hdfs_user_to_impersonate': None, 
+u'service_config_suppression_hive_proxy_user_groups_list': None, 
+u'service_config_suppression_audit_event_log_dir': None, 
+u'hdfs_canary_health_enabled': None, 
+u'hdfs_blocks_with_corrupt_replicas_thresholds': None, 
+u'hadoop_authorized_admin_groups': None, 
+u'hadoop_group_mapping_ldap_group_filter': None, 
+u'service_config_suppression_extra_auth_to_local_rules': None, 
+u'service_config_suppression_ssl_client_truststore_location': None, 
+u'service_config_suppression_hdfs_ssl_server_safety_valve': None, 
+u'service_health_suppression_hdfs_under_replicated_blocks': None, 
+u'navigator_client_config_safety_valve': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_group_name_attr': None, 
+u'hdfs_standby_namenodes_health_enabled': None, 
+u'dfs_ha_fencing_ssh_private_key_files': None, 
+u'service_config_suppression_hdfs_replication_haoop_env_sh_safety_valve': None, 
+u'hadoop_group_mapping_ldap_use_ssl': None, 
+u'service_config_suppression_ssl_server_keystore_keypassword': None, 
+u'service_config_suppression_hadoop_group_mapping_ldap_keystore': None, 
+u'hdfs_ssl_client_safety_valve': None, 
+u'service_config_suppression_redaction_policy_validator': None}
+
+
 
 
 HDFS_NAMENODE_SERVICE_NAME = "nn"
 HDFS_NAMENODE_HOST = CM_HOST
 HDFS_NAMENODE_CONFIG = {
-  'dfs_name_dir_list': '/testdir/dfs/nn',
-  'dfs_namenode_handler_count': 30,
-  #'dfs_namenode_servicerpc_address': 'r2341-d5-us01.dssd.com:8022'
+  u'dfs_name_dir_list': '/testdir/dfs/nn',
+  u'dfs_namenode_handler_count': u'30',
+  u'dfs_namenode_servicerpc_address': u'8022',
 }
 
 hdfs_NAMENODE_BASE_CONFIG={
@@ -525,8 +773,113 @@ HDFS_DATANODE_CONFIG = {
   'dfs_datanode_data_dir_perm': 755,
 }
 
+DSSD_DATANODE_CONFIG={
+  #u'dfs_datanode_max_xcievers': None,
+  #u'datanode_java_heapsize': None,
+  #u'datanode_log_dir': None,
+  #u'dfs_datanode_readahead_bytes': None,
+  #u'dfs_datanode_https_port': None,
+  u'com_dssd_flood_conn_cpus': 'all',
+  #u'datanode_java_opts': None,
+  #u'max_log_size': '200MB',
+  #u'dfs_datanode_handler_count': None,
+  u'com_dssd_flood_conn_client_qdepth': 64,
+}
 
+
+#this may be different than hdfs_DATANODE_BASE_CONFIG
 hdfs_DATANODE_BASE_CONFIG={
+u'dfs_datanode_max_xcievers': None, 
+u'stacks_collection_enabled': None, 
+u'dfs_datanode_drop_cache_behind_reads': None, 
+u'stacks_collection_method': None, 
+u'role_health_suppression_dssd_data_node_ha_connectivity': None, 
+u'dfs_datanode_use_datanode_hostname': None, 
+u'dssddatanode_web_metric_collection_enabled': None, 
+u'log4j_safety_valve': None, 
+u'dssddatanode_host_health_enabled': None, 
+u'unexpected_exits_window': None, 
+u'role_config_suppression_oom_heap_dump_dir': None, 
+u'datanode_java_heapsize': None, 
+u'role_health_suppression_dssd_data_node_scm_health': None, 
+u'datanode_log_dir': None, 
+u'enable_config_alerts': None, 
+u'dfs_datanode_readahead_bytes': None, 
+u'dfs_datanode_https_port': None, 
+u'oom_heap_dump_enabled': None, 
+u'dfs_balance_bandwidthPerSec': None, 
+u'datanode_transceivers_usage_thresholds': None, 
+u'role_config_suppression_com_dssd_flood_conn_cpus': None, 
+u'role_config_suppression_stacks_collection_directory': None, 
+u'com_dssd_flood_conn_cpus': None, 
+u'log_event_whitelist': None, 
+u'dssddatanode_web_metric_collection_thresholds': None, 
+u'heap_dump_directory_free_space_absolute_thresholds': None, 
+u'dssddatanode_pause_duration_window': None, 
+u'role_config_suppression_datanode_java_opts': None, 
+u'max_log_size': '200MB', 
+u'role_triggers': None, 
+u'datanode_java_opts': None, 
+u'role_config_suppression_dfs_datanode_plugins_list': None, 
+u'hadoop_metrics2_safety_valve': None, 
+u'stacks_collection_data_retention': None, 
+u'dfs_datanode_http_port': None, 
+u'unexpected_exits_thresholds': None, 
+u'com_dssd_flood_conn_qmax': None, 
+u'role_config_suppression_hadoop_metrics2_safety_valve': None, 
+u'dfs_datanode_port': None, 
+u'heap_dump_directory_free_space_percentage_thresholds': None, 
+u'rm_cpu_shares': None, 
+u'log_threshold': None, 
+u'dssddatanode_fd_thresholds': None, 
+u'role_health_suppression_dssd_data_node_file_descriptor': None, 
+u'role_config_suppression_datanode_failed_volumes_validator': None, 
+u'role_health_suppression_dssd_data_node_heap_dump_directory_free_space': None, 
+u'process_auto_restart': None, 
+u'role_config_suppression_log4j_safety_valve': None, 
+u'role_config_suppression_log_event_whitelist': None, 
+u'role_config_suppression_cdh_version_validator': None, 
+u'rm_memory_hard_limit': None, 
+u'dfs_datanode_plugins_list': None, 
+u'process_swap_memory_thresholds': None, 
+u'rlimit_fds': None, 
+u'role_config_suppression_datanode_reserved_space_validator': None, 
+u'datanode_config_safety_valve': None, 
+u'datanode_connectivity_health_enabled': None, 
+u'dfs_thrift_threads_min': None, 
+u'role_config_suppression_datanode_config_safety_valve': None, 
+u'role_config_suppression_dssddatanode_role_env_safety_valve': None, 
+u'datanode_connectivity_tolerance': None, 
+u'role_health_suppression_dssd_data_node_host_health': None, 
+u'dfs_thrift_threads_max': '4096', 
+u'role_health_suppression_dssd_data_node_unexpected_exits': None, 
+u'oom_heap_dump_dir': None, 
+u'stacks_collection_frequency': None, 
+u'role_health_suppression_dssd_data_node_swap_memory_usage': None, 
+u'dfs_datanode_sync_behind_writes': None, 
+u'role_health_suppression_dssd_data_node_web_metric_collection': None, 
+u'role_health_suppression_dssd_data_node_transceivers_usage': None, 
+u'dfs_datanode_drop_cache_behind_writes': None, 
+u'dfs_datanode_bind_wildcard': None, 
+u'dfs_datanode_handler_count': '60', 
+u'max_log_backup_index': None, 
+u'dfs_thrift_timeout': None, 
+u'rm_memory_soft_limit': None, 
+u'dfs_datanode_ipc_port': None, 
+u'role_config_suppression_datanode_log_dir': None, 
+u'com_dssd_flood_conn_client_qdepth': '64', 
+u'role_config_suppression_role_triggers': None, 
+u'role_config_suppression_datanode_java_heapsize': None, 
+u'oom_sigkill_enabled': None, 
+u'enable_alerts': None, 
+u'DSSDDATANODE_role_env_safety_valve': None, 
+u'stacks_collection_directory': None, 
+u'rm_io_weight': None, 
+u'role_health_suppression_dssd_data_node_pause_duration': None, 
+u'dssddatanode_scm_health_enabled': None, 
+u'dssddatanode_pause_duration_thresholds': None}
+
+DSSDDATANODE_BASE_CONFIG={
 u'dfs_datanode_max_xcievers': None, 
 u'stacks_collection_enabled': None, 
 u'role_health_suppression_data_node_transceivers_usage': None, 
@@ -870,8 +1223,8 @@ u'journalNode_java_opts': None,
 u'max_log_backup_index': None, 
 u'journalnode_sync_status_startup_tolerance': None, 
 u'rm_cpu_shares': None, 
-u'dfs_journalnode_http_port': 
-None, u'oom_heap_dump_dir': None, 
+u'dfs_journalnode_http_port': None, 
+u'oom_heap_dump_dir': None, 
 u'stacks_collection_frequency': None, 
 u'stacks_collection_directory': None, 
 u'role_config_suppression_stacks_collection_directory': None, 
@@ -1019,39 +1372,39 @@ IMPALAD={u'scratch_dirs': u'/testdir/impala/impalad', u'impalad_memory_limit': u
 
 
 
-def inspect_hosts(api):
-  cluster = api.get_cluster("HDDTest")
-  print "cluster:", cluster
-  print "Inspecting hosts. This might take a few minutes."
-  #cm = api.get_cloudera_manager()
-  #print "cm:", cm
-  
-  #cmd = cm.inspect_hosts()
-  #while cmd.success == None:
-  #  cmd = cmd.fetch()
-  #
-  #  if cmd.success != True:
-  #      print "Host inpsection failed!"
-  #      exit(0)
-  #
-  #print "Hosts successfully inspected: \n" + cmd.resultMessage
 
+def deploy_hdfs(api,cluster, hdfs_service_name, hdfs_config, hdfs_nn_service_name, hdfs_nn_host, hdfs_nn_config, hdfs_snn_host, hdfs_snn_config, hdfs_dn_hosts, hdfs_dn_config, hdfs_gw_hosts, hdfs_gw_config):
 
-def deploy_hdfs(cluster, hdfs_service_name, hdfs_config, hdfs_nn_service_name, hdfs_nn_host, hdfs_nn_config, hdfs_snn_host, hdfs_snn_config, hdfs_dn_hosts, hdfs_dn_config, hdfs_gw_hosts, hdfs_gw_config):
-   hdfs_service = cluster.create_service(hdfs_service_name, "HDFS")
-   hdfs_service.update_config(hdfs_config)
-   
+   if api.get_cloudera_manager().get_config().get(u"DSSD_ENABLED"):
+     print "deploy_hdfs DSSD_ENABLED!!!!!!!"
+     hdfs_service = cluster.create_service(hdfs_service_name, "HDFS")
+     hdfs_service.update_config(DSSD_HDFS_SERVICE_CONFIG)
+   else:
+     print "deploy_hdfs DSSD NOT ENABLED!!!!!!!"
+     hdfs_service = cluster.create_service(hdfs_service_name, "HDFS")
+     hdfs_service.update_config(hdfs_config)
+   #
    nn_role_group = hdfs_service.get_role_config_group("{0}-NAMENODE-BASE".format(hdfs_service_name))
+   print "deploy_hdfs nn_role_group:%s", nn_role_group
    nn_role_group.update_config(hdfs_nn_config)
+   print "deploy_hdfs hdfs_nn_config uploaded to Clouera manager"
    nn_service_pattern = "{0}-" + hdfs_nn_service_name
    hdfs_service.create_role(nn_service_pattern.format(hdfs_service_name), "NAMENODE", hdfs_nn_host)
    
    snn_role_group = hdfs_service.get_role_config_group("{0}-SECONDARYNAMENODE-BASE".format(hdfs_service_name))
    snn_role_group.update_config(hdfs_snn_config)
    hdfs_service.create_role("{0}-snn".format(hdfs_service_name), "SECONDARYNAMENODE", hdfs_snn_host)
-   
-   dn_role_group = hdfs_service.get_role_config_group("{0}-DATANODE-BASE".format(hdfs_service_name))
-   dn_role_group.update_config(hdfs_dn_config)
+
+
+   if api.get_cloudera_manager().get_config().get(u'DSSD_ENABLED'):
+     print "deploy_hdfs DSSD enabled, getting dn_role_group"
+     dn_role_group = hdfs_service.get_role_config_group("{0}-DSSDDATANODE-BASE".format(hdfs_service_name))
+     print "deploy_hdfs dn_role_group:", dn_role_group
+     dn_role_group.update_config(DSSD_DATANODE_CONFIG)
+     print "deploy_hdfs updating dn_role_group.config"
+   else:
+     dn_role_group = hdfs_service.get_role_config_group("{0}-DATANODE-BASE".format(hdfs_service_name))
+     dn_role_group.update_config(hdfs_dn_config)
    
    gw_role_group = hdfs_service.get_role_config_group("{0}-GATEWAY-BASE".format(hdfs_service_name))
    gw_role_group.update_config(hdfs_gw_config)
@@ -1059,7 +1412,7 @@ def deploy_hdfs(cluster, hdfs_service_name, hdfs_config, hdfs_nn_service_name, h
    datanode = 0
    for host in hdfs_dn_hosts:
       datanode += 1
-      hdfs_service.create_role("{0}-dn-".format(hdfs_service_name) + str(datanode), "DATANODE", host)
+      hdfs_service.create_role("{0}-dn-".format(hdfs_service_name) + str(datanode), "DSSDDATANODE", host)
    
    gateway = 0
    for host in hdfs_gw_hosts:
@@ -1166,54 +1519,13 @@ def deploy_yarn(cluster, yarn_service_name, yarn_service_config, yarn_rm_host, y
 
   
 
-def deploy_hdfs1(api):
-   cluster = api.get_cluster("HDDTest")
-   hdfs_service = cluster.create_service("HDFS", "HDFS")
-   hdfs_service.update_config(HDFS_SERVICE_CONFIG)
-   
-   nn_role_group = hdfs_service.get_role_config_group("{0}-NAMENODE-BASE".format("hdfs"))
-   nn_role_group.update_config(HDFS_NN_CONFIG)
-   nn_service_pattern = "{0}-" + "NAMENODE"
-   hdfs_service.create_role(nn_service_pattern.format('hdfs'), "NAMENODE", hosts['r2341-d5-us01.dssd.com'])
-   
-   snn_role_group = hdfs_service.get_role_config_group("{0}-SECONDARYNAMENODE-BASE".format("hdfs"))
-   snn_role_group.update_config(HDFS_SNN_CONFIG)
-   hdfs_service.create_role("{0}-snn".format("hdfs"), "SECONDARYNAMENODE", hosts['r2341-d5-us01.dssd.com'])
-   
-   dn_role_group = hdfs_service.get_role_config_group("{0}-DATANODE-BASE".format("hdfs"))
-   dn_role_group.update_config(HDFS_DN_CONFIG)
-   
-   gw_role_group = hdfs_service.get_role_config_group("{0}-GATEWAY-BASE".format("hdfs"))
-   gw_role_group.update_config(HDFS_GW_CONFIG)
-   
-   datanode = 0
-   for host in CLUSTER_HOSTS:
-      datanode += 1
-      hdfs_service.create_role("{0}-DATANODE-".format("hdfs") + str(datanode), "DATANODE", hosts[host])
-   
-   gateway = 0
-   for host in CLUSTER_HOSTS:
-      gateway += 1
-      hdfs_service.create_role("{0}-gw-".format("hdfs") + str(gateway), "GATEWAY", hosts[host])
-
-   #format NN
-   cmd = hdfs_service.format_hdfs("{0}-NAMENODE".format("hdfs"))[0]
-   if not cmd.wait(30).success:
-      print "WARNING: Failed to format HDFS, attempting to continue with the setup" 
-   
-
-   hdfs_service.start().wait()
-   #start NN
-   
-   #start SNN
-   
-   #start DN
-
 
 def init_hdfs(hdfs_service, hdfs_name):
+   print "init_hdfs, make sure cleandatanode.sh is run first to clean the NN and DN storage"
    cmd = hdfs_service.format_hdfs("{0}-nn".format(hdfs_name))[0]
    if not cmd.wait(60).success:
-      print "WARNING: Failed to format HDFS, attempting to continue with the setup" 
+      print "WARNING: Failed to format HDFS, exiting, fix before continuing"
+      exit(0) 
    hdfs_service.start().wait()
 
 
@@ -1230,34 +1542,48 @@ def main():
   print "parcels downloaded, verify you can see the services in add services"
   print "and parcels are activated for CDH, "
   api = ApiResource('r2341-d5-us01', username='admin', password='admin')
-  print "api:",api
-  inspect_hosts(api)
-  CLUSTER = api.get_cluster("HDDTest") 
-  hdfs_service = deploy_hdfs(CLUSTER, HDFS_SERVICE_NAME, HDFS_SERVICE_CONFIG, HDFS_NAMENODE_SERVICE_NAME, HDFS_NAMENODE_HOST, HDFS_NAMENODE_CONFIG, HDFS_SECONDARY_NAMENODE_HOST, HDFS_SECONDARY_NAMENODE_CONFIG, HDFS_DATANODE_HOSTS, HDFS_DATANODE_CONFIG, HDFS_GATEWAY_HOSTS, HDFS_GATEWAY_CONFIG)
+  #we need to revisit the host inspect
+  #inspect_hosts(api)
+  CLUSTER = api.get_all_clusters()[0] 
+  print "CLUSTER:%s,", CLUSTER
+  
+  if api.get_cloudera_manager().get_config().get(u"DSSD_ENABLED"):
+    print "deploying DSSD hdfs"
+    hdfs_service = deploy_hdfs(api,CLUSTER, HDFS_SERVICE_NAME, HDFS_SERVICE_CONFIG, HDFS_NAMENODE_SERVICE_NAME, HDFS_NAMENODE_HOST, HDFS_NAMENODE_CONFIG, HDFS_SECONDARY_NAMENODE_HOST, HDFS_SECONDARY_NAMENODE_CONFIG, HDFS_DATANODE_HOSTS, DSSD_DATANODE_CONFIG, HDFS_GATEWAY_HOSTS, HDFS_GATEWAY_CONFIG)
+  else:
+    print "deploying non-dssd hdfs"
+    hdfs_service = deploy_hdfs(api,CLUSTER, HDFS_SERVICE_NAME, HDFS_SERVICE_CONFIG, HDFS_NAMENODE_SERVICE_NAME, HDFS_NAMENODE_HOST, HDFS_NAMENODE_CONFIG, HDFS_SECONDARY_NAMENODE_HOST, HDFS_SECONDARY_NAMENODE_CONFIG, HDFS_DATANODE_HOSTS, HDFS_DATANODE_CONFIG, HDFS_GATEWAY_HOSTS, HDFS_GATEWAY_CONFIG)
+  
   print "Deployed HDFS service " + HDFS_SERVICE_NAME + " using NameNode on " + HDFS_NAMENODE_HOST + ", SecondaryNameNode on " + HDFS_SECONDARY_NAMENODE_HOST + ", and DataNodes running on: "
   #PRETTY_PRINT.pprint(HDFS_DATANODE_HOSTS)
   init_hdfs(hdfs_service, HDFS_SERVICE_NAME)
   print "formatted namenode in hdfs service"
   CLUSTER.deploy_client_config()
-  # 
+  
+  
+
   print 'installing yarn'
   yarn_service = deploy_yarn(CLUSTER, YARN_SERVICE_NAME, YARN_SERVICE_CONFIG, YARN_RM_HOST, YARN_RM_CONFIG, YARN_JHS_HOST, YARN_JHS_CONFIG, YARN_NM_HOSTS, YARN_NM_CONFIG, YARN_GW_HOSTS, YARN_GW_CONFIG)
   print "Deployed YARN service " + YARN_SERVICE_NAME + " using ResourceManager on " + YARN_RM_HOST + ", JobHistoryServer on " + YARN_JHS_HOST + ", and NodeManagers on "
   #PRETTY_PRINT.pprint(YARN_NM_HOSTS)
   yarn_service.start().wait()
+  CLUSTER.deploy_client_config()
+
+
   print "deploying hive"
   hive_service = deploy_hive(CLUSTER, HIVE_SERVICE_NAME, HIVE_SERVICE_CONFIG, HIVE_HMS_HOST, HIVE_HMS_CONFIG, HIVE_HS2_HOST, HIVE_HS2_CONFIG, HIVE_WHC_HOST, HIVE_WHC_CONFIG, HIVE_GW_HOSTS, HIVE_GW_CONFIG)
   print "Depoyed Hive service " + HIVE_SERVICE_NAME + " using HiveMetastoreServer on " + HIVE_HMS_HOST + " and HiveServer2 on " + HIVE_HS2_HOST
   hive_service.start().wait()
   init_hive(hive_service)
   print "Initialized Hive service"
+  CLUSTER.deploy_client_config()
 
 
   impala_service = deploy_impala(CLUSTER, IMPALA_SERVICE_NAME, IMPALA_SERVICE_CONFIG, IMPALA_SS_HOST, IMPALA_SS_CONFIG, IMPALA_CS_HOST, IMPALA_CS_CONFIG, IMPALA_ID_HOSTS, IMPALA_ID_CONFIG)
   print "Deployed Impala service " + IMPALA_SERVICE_NAME + " using StateStore on " + IMPALA_SS_HOST + ", CatalogServer on " + IMPALA_CS_HOST + ", and ImpalaDaemons on "
   #PRETTY_PRINT.pprint(IMPALA_ID_HOSTS)
   impala_service.start().wait()
-
+  CLUSTER.deploy_client_config()
 
 if __name__ == '__main__':
    main()

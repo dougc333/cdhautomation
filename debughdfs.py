@@ -55,32 +55,35 @@ def search(config_dict):
 
 
 def get_info(api):
-  cluster = api.get_cluster("HDDTest")
-  cm = api.get_cloudera_manager()
-  print "cm config:",cm.get_config(view="Full")
-  #search(cm.get_config(view="Full"))
-  #exit(0)
-  all_services = cluster.get_all_services(view="Full")
-  #print "all_services:", all_services
-  for service in all_services:
-    print "service:", service
-    tuple_conf = service.get_config(view="Full")
-    print "service config:", tuple_conf[0]
-    #for t in tuple_conf:
-    #  print "\n tuple:", t
-    search(tuple_conf[0])
-    list_rcg = service.get_all_role_config_groups()
-    print "role config groups:", list_rcg  
-    for rcg in list_rcg:
-      print "rcg:",rcg, " rcg config:", rcg.get_config(view="Full")
-      rcg_dict = rcg.get_config(view="Full")
-      search(rcg_dict)    
-      list_roles = rcg.get_all_roles()
-      print "list_roles:", list_roles
-      for r in list_roles:
-        r_dict = r.get_config(view="Full")
-        print "role:", r, " config:", r_dict
-        search(r_dict)
+  clusterList = api.get_all_clusters(view="Full")
+  print "clusterList:%s", clusterList
+  for cluster in clusterList:
+    print "cluster: %s",cluster
+    cm = api.get_cloudera_manager()
+    print "cm config:",cm.get_config(view="Full")
+    #search(cm.get_config(view="Full"))
+    #exit(0)
+    all_services = cluster.get_all_services(view="Full")
+    #print "all_services:", all_services
+    for service in all_services:
+      print "service:", service
+      tuple_conf = service.get_config(view="Full")
+      print "service config:", tuple_conf[0]
+      #for t in tuple_conf:
+      #  print "\n tuple:", t
+      search(tuple_conf[0])
+      list_rcg = service.get_all_role_config_groups()
+      print "role config groups:", list_rcg  
+      for rcg in list_rcg:
+        print "rcg:",rcg, " rcg config:", rcg.get_config(view="Full")
+        rcg_dict = rcg.get_config(view="Full")
+        search(rcg_dict)    
+        list_roles = rcg.get_all_roles()
+        print "list_roles:", list_roles
+        for r in list_roles:
+          r_dict = r.get_config(view="Full")
+          print "role:", r, " config:", r_dict
+          search(r_dict)
 
 
 

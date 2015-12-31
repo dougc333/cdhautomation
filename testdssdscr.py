@@ -3,19 +3,19 @@
 import sys
 import argparse
 import subprocess
-from cm_api.api_client import ApiResource
-from cm_api.api_client import ApiException
-from cm_api.endpoints.clusters import create_cluster
-from cm_api.endpoints.clusters import delete_cluster
+from cm_api.api_client import ApiResource,ApiException
 from cm_api.endpoints.cms import ClouderaManager
 from cm_api.endpoints.parcels import get_parcel
 
 from time import sleep
 import re
+import time
 
-from config import HDD_hdfs_config
+#from config import HDD_hdfs_config
 
 
+#add solr and spark repos in check, install other repos? 
+#the code drop repos dont contain the hardcoded spark and solr repos, from remore parcel url have to distribute/activate the spark and solr repos
 beta_repo=[
   'http://dssd-beta:dssd-beta@bits.cloudera.com/73a30662/cm560/redhat/6/x86_64/cm/',
   'http://dssd-beta:dssd-beta@bits.cloudera.com/73a30662/cdh560/parcels/5.6.0.2/',
@@ -29,10 +29,6 @@ code_drop_6_repo=[
 ]
 
 
-def setDSSD(boolValue,api):
-  cm=ClouderaManager(api)
-  cm.update_config({"dssd_enabled": boolValue})
-  
 
 def add_hosts(api):
    """
@@ -49,51 +45,63 @@ def add_hosts(api):
           hostId_list.append(host_list.to_json_dict(preserve_ro=True)["items"][i]["hostId"])
       cluster.add_hosts(hostId_list)
 
-  
-
-def check_parcel_reposs(api):
+#clean up , screwed up
+def clean_parcel_repo(api):
   repo_config=api.get_cloudera_manager().get_config(view="Full")['REMOTE_PARCEL_REPO_URLS']
-  print repo_config
+  cleanMe= [x for x in repo_config if  x not in code_drop_6_repo]
+  print "cleanME:", cleanMe
+  
+# this is still broken..some UI prompt for repo to use? 
+#or test this with beta
+def check_parcel_repos(api):
+  repo_config=api.get_cloudera_manager().get_config(view="Full")['REMOTE_PARCEL_REPO_URLS']
+  print 'repo_config: ',repo_config
   # test for code drop 6 repo
-  if 'http://dssd:dssd@bits.cloudera.com/c515c923/' in repo_config:
+  if set(code_drop_6_repo) < set(repo_config.split(',')):
     print 'repo code drop 6 in parcels'
+  elif set(beta_repo) < set(repo_config):
+    print 'beta repo currently loaded in parcels'
   else:
-    api.get_cloudera_manager.update_config({'REMOTE_PARCEL_REPO_URLS':repo_config.join(code_drop_6_repo)})
+    print "no repos loaded"
+    # if nothing loaded we load code drop 6 # HAVE TO CVHANGE this later
+    api.get_cloudera_manager().update_config({'REMOTE_PARCEL_REPO_URLS':repo_config.join(code_drop_6_repo)})
     time.sleep(10)
 
-def download_dist_activate_parcel(parcel):
+
+def download_dist_activate_parcel(cluster,api,parcel):
   """
   input: parcel object, output: should see parcel activated under Cloudera Manager UI
   """
-  print "Downloading"
-      cmd = distMe.start_download()
-      while distMe.stage != "DOWNLOADED":
-        sleep(5)
-        print("."),
-        distMe=get_parcel(api, distMe.product, distMe.version, cluster.name)
-      print "parcel downloaded", distMe.product+" ,version:" + distMe.version + "DOWNLOADED"
+  print "Downloading %s", parcel.product+parcel.version
+  cmd = parcel.start_download()
+  while parcel.stage != "DOWNLOADED":
+    sleep(5)
+    print parcel.stage
+    print("."),
+    parcel=get_parcel(api, parcel.product, parcel.version, cluster.name)
+  print "parcel downloaded", parcel.product+" ,version:" + parcel.version + "DOWNLOADED"
 
 
-      cmd = distMe.start_distribution()
-      print "Distributing"
-      while distMe.stage != "DISTRIBUTED":
-        sleep(5)
-        print("."),
-        sys.stdout.flush()
-        distMe= get_parcel(api,distMe.product, distMe.version, cluster.name)
-      print "parcel distributed" , distMe.product + ", version:", distMe.version + "DISTRIBUTED"
+  cmd = parcel.start_distribution()
+  print "Distributing"
+  while parcel.stage != "DISTRIBUTED":
+    sleep(5)
+    print("."),
+    sys.stdout.flush()
+    parcel= get_parcel(api,parcel.product, parcel.version, cluster.name)
+  print "parcel distributed" , parcel.product + ", version:", parcel.version + "DISTRIBUTED"
 
-      cmd = distMe.activate()
-      if cmd.success != True:
-        print "activation failed!!!"
-        exit(0)
+  cmd = parcel.activate()
+  if cmd.success != True:
+    print "activation failed!!!"
+    exit(0)
 
-      print "Activating"
-      while distMe.stage != "ACTIVATED":
-        sleep(5)
-        print".",
-        distMe = get_parcel(api, distMe.product, distMe.version, cluster.name)
-      print "parcel activated" , distMe.product + ", version:", distMe.version + "ACTIVATED"
+  print "Activating"
+  while parcel.stage != "ACTIVATED":
+    sleep(5)
+    print".",
+    parcel = get_parcel(api, parcel.product, parcel.version, cluster.name)  
+  print "parcel activated" , parcel.product + ", version:", parcel.version + "ACTIVATED"
 
  
 def add_parcels(api):
@@ -123,12 +131,14 @@ def add_parcels(api):
    
       distMe = parcels_dict.get('CDH5.6.0-1.cdh5.6.0.p0.70')
       print "found CDH first, we update this first:", distMe.product+" ,version:"+distMe.version
-      download_dist_activate_parcel(parcel)      
+      download_dist_activate_parcel(cluster,api,distMe)      
       if cm.get_config()[u"DSSD_ENABLED"]:
         #download the other parcels in the dictionary minus the CDH one which should be updated
         del parcels_dict['CDH5.6.0-1.cdh5.6.0.p0.70']
+        print "after removal you should see 2 parcels here:", parcels_dict
+        print "we are only downloading the dssd parcels"
         for p in parcels_dict.keys():
-          download_dist_activate_parcel(parcels_dict.get(p))
+          download_dist_activate_parcel(cluster,api,parcels_dict.get(p))
       
       # set vm.swappiness and thp
       # this part below does not work, run ./swappy.sh manually 
@@ -175,11 +185,6 @@ def clean(api):
     api.delete_cluster(cluster.name)
 
 
-def make_cluster(cluster_name, api):
-  """
-  """
-  api.create_cluster(cluster_name,version="CDH5")
-  add_hosts(api)
 
 def main():
   parser = cm_args_parser()
@@ -187,10 +192,6 @@ def main():
   print "connecting to host:" + args.cm_host + "..."
   api = ApiResource(args.cm_host, username=args.cm_user, password=args.cm_password)
   print "done....."
-  #setDSSD(True, api)
-  #make_cluster("HDDTest", api)
-  #add_parcels(api)
-
 
  
 if __name__ == '__main__':
