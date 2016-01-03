@@ -141,7 +141,7 @@ def main(argv):
       try:
         print val
         from_time = datetime.strptime(val, "%Y-%m-%dT%H:%M")
-        print "from_time:%s", from_time
+        print "from_time:%s" % from_time
         from_time = from_time.isoformat()
         print "from_time after isoformat():%s", from_time
       except:

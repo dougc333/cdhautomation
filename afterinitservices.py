@@ -779,7 +779,7 @@ DSSD_DATANODE_CONFIG={
   #u'datanode_log_dir': None,
   #u'dfs_datanode_readahead_bytes': None,
   #u'dfs_datanode_https_port': None,
-  u'com_dssd_flood_conn_cpus': 'all',
+  u'com_dssd_flood_conn_cpus': '26,28,30',
   #u'datanode_java_opts': None,
   #u'max_log_size': '200MB',
   #u'dfs_datanode_handler_count': None,
