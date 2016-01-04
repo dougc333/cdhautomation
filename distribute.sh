@@ -13,3 +13,9 @@ for nodes in ${datanodes[@]};do
     scp -r /root/cdhautomation root@$nodes:/root 
 done
 
+#run the makedata data creation on each node
+for nodes in ${datanodes[@]};do
+   printf "mvn clean, compile in nodes"
+   printf "nodes:$nodes\n"
+   ssh $nodes "cd /root/cdhautomation; mvn clean compile"
+done
