@@ -23,13 +23,13 @@ service_types_and_names = {
   "IMPALA":"impala"
 }
 
-cm_host="r2341-d5-us01"
+cm_host="r2341-d5-us31"
 cm_port = 7180
 host_list=[
-      'r2341-d5-us01.dssd.com',
-      'r2341-d5-us02.dssd.com',
-      'r2341-d5-us03.dssd.com',
-      'r2341-d5-us04.dssd.com'
+      'r2341-d5-us31.dssd.com',
+      'r2341-d5-us32.dssd.com',
+      'r2341-d5-us33.dssd.com',
+      'r2341-d5-us34.dssd.com'
 ]
 
 cdh_version="CDH5"
