@@ -32,16 +32,18 @@ from cm_api.endpoints.parcels import get_parcel
 from time import sleep
 import re
 
+
+
 #these constants are in /etc/cloudera-scm-server/db.mgmt.properties
 #parse once we have working code
-AMON_PASSWORD="ApwcwtKYZA"
-RMAN_PASSWORD="WOpCAH8w0M"
-CM_HOST='r2341-d5-us01.dssd.com'
+AMON_PASSWORD="jz0qyod6kS"
+RMAN_PASSWORD="J0s5XD6rTf"
+CM_HOST='r2341-d5-us31.dssd.com'
 
 # without the roles we end up with MGMT which cant start
 AMON_ROLENAME="ACTIVITYMONITOR"
 AMON_ROLE_CONFIG = {
-   'firehose_database_host': "r2341-d5-us01.dssd.com:7432",
+   'firehose_database_host': 'r2341-d5-us31.dssd.com:7432',
    'firehose_database_user': 'amon',
    'firehose_database_password': AMON_PASSWORD,
    'firehose_database_type': 'postgresql',
@@ -60,7 +62,7 @@ SMON_ROLENAME = "SERVICEMONITOR"
 SMON_ROLE_CONFIG = {u'firehose_heapsize': u'268435456', u'firehose_non_java_memory_bytes': u'1610612736' }
 RMAN_ROLENAME = "REPORTMANAGER"
 RMAN_ROLE_CONFIG = {
-   'headlamp_database_host': "r2341-d5-us01.dssd.com:7432",
+   'headlamp_database_host': 'r2341-d5-us31.dssd.com:7432',
    'headlamp_database_user': 'rman',
    'headlamp_database_password': RMAN_PASSWORD,
    'headlamp_database_type': 'postgresql',
@@ -139,7 +141,7 @@ def deploy_management(manager, mgmt_servicename, mgmt_service_conf, mgmt_role_co
 
 def cm_args_parser():
   parser = argparse.ArgumentParser()
-  parser.add_argument("--cm_host",default='r2341-d5-us01',help="url for host")
+  parser.add_argument("--cm_host",default=CM_HOST,help="url for host")
   parser.add_argument("--cm_user",default='admin', help='default user name')
   parser.add_argument("--cm_password",default='admin',help='default password for default user name')
   return parser
