@@ -1,4 +1,6 @@
 cloudera question: how to add final tag in after value tag? 
+\
+
 
 Contains Cloudera Manager automation code
 current status: both HDD and DSSD mode work. Have to fix the OOM configuration and iterate
