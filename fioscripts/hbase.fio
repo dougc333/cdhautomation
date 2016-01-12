@@ -1,13 +1,17 @@
-# An example of an extremely minimal fio job.
+# hbase experiment dougc
+#when running htop I only see half the cpus pegged at 100%
+#
+#
+
 [global]
 thread=1
 ioengine=/opt/dssd/lib64/fioflood.so.1
 volume=dougc
 type=block
 unlink=0
-runtime=20
+runtime=120
 time_based=1
-numjobs=32
+numjobs=4
 
 
 [Test]
@@ -16,11 +20,10 @@ flen=32k
 blocksize=128m
 size=1G
 iodepth=64
-numa_cpu_nodes=1
-numa_mem_policy=bind:0
 invalidate=0
-direct=1
 group_reporting=1
-#readwrite=rw
+direct=1
+readwrite=rw
 #norandommap
-
+rwmixread=100
+rwmixwrite=0
