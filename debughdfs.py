@@ -20,6 +20,9 @@ from time import sleep
 
 import re
 
+import argparse
+
+
 lookfor=[ u'dfs_namenode_name_dir',
           u'dfs_name_dir',
           u'dfs_https_port',
@@ -85,6 +88,15 @@ def get_info(api):
           print "role:", r, " config:", r_dict
           search(r_dict)
 
+
+
+def args_parser():
+  """
+  """
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--master_node", default='r2371-d5-us01', help='enter address of NameNode/HBase Master Node')  
+  parser.add_argument("--cm_user", default='admin', help='Cloudera Manager user name, default is admin')
+  parser.add_argument('--cm-password', default='admin', help='')
 
 
 
