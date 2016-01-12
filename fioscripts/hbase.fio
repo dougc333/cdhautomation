@@ -1,0 +1,26 @@
+# An example of an extremely minimal fio job.
+[global]
+thread=1
+ioengine=/opt/dssd/lib64/fioflood.so.1
+volume=dougc
+type=block
+unlink=0
+runtime=20
+time_based=1
+numjobs=32
+
+
+[Test]
+filename=dougctest
+flen=32k
+blocksize=128m
+size=1G
+iodepth=64
+numa_cpu_nodes=1
+numa_mem_policy=bind:0
+invalidate=0
+direct=1
+group_reporting=1
+#readwrite=rw
+#norandommap
+
