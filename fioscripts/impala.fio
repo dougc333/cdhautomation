@@ -6,25 +6,26 @@
 [global]
 thread=1
 ioengine=/opt/dssd/lib64/fioflood.so.1
-libflood_tune=vpci.qmax=4
 volume=dougc
 type=block
 unlink=0
-runtime=60
+runtime=120
 time_based=1
-numjobs=1
+numjobs=6
 
 
 [Test]
 filename=dougctest
 flen=32k
 blocksize=128m
-size=200G
-iodepth=64
+size=1G
+iodepth=100
 invalidate=0
 group_reporting=1
 direct=1
-rw=randread
+buffered=0
+thread
+readwrite=read
 #norandommap
 #rwmixread=100
 #rwmixwrite=0
