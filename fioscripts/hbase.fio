@@ -12,7 +12,7 @@ type=block
 unlink=0
 runtime=60
 time_based=1
-numjobs=1
+numjobs=4
 
 
 [Test]

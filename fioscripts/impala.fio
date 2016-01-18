@@ -6,19 +6,19 @@
 [global]
 thread=1
 ioengine=/opt/dssd/lib64/fioflood.so.1
-volume=dougc
+volume=doug32k
 type=block
 unlink=0
 runtime=120
 time_based=1
-numjobs=6
+numjobs=4
 
 
 [Test]
-filename=dougctest
+filename=dougc32k
 flen=32k
 blocksize=128m
-size=1G
+size=10G
 iodepth=100
 invalidate=0
 group_reporting=1
